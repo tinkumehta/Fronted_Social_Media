@@ -1,18 +1,39 @@
 
 import './App.css'
-import conf from './conf/conf'
+import {Footer, Header} from "./components"
+import {login, logout} from "./store/authSlice"
+import authService from "./appwrite/auth"
+import {Outlet} from "react-router-dom"
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 function App() {
-  
+  const [loading, setLoading] = useState(true)
+  const dispatch = useDispatch()
 
-  return (
-    <>
-      
-      <h1 className='w-full text-2xl text-blue-500 '>Wel Come</h1>
-    
-      
-    </>
-  )
+  useEffect(() => {
+    authService.getCurrentUser()
+    .then((userData) => {
+      if (userData) {
+        dispatch(login({userData}))
+      } else {
+        dispatch(logout())
+      }
+    })
+    .finally(() => setLoading(false))
+  }, [])
+
+  return !loading ? (
+   <div className="min-h-screen flex flex-wrap content-between bg-gray-400">
+    <div className="w-full block">
+      <Header />
+      <main>
+        TODO : <Outlet />
+      </main>
+      <Footer />
+    </div>
+   </div>
+  ) : null
 }
 
 export default App

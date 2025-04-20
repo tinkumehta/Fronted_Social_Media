@@ -1,4 +1,4 @@
-import conf from "../conf/conf";
+import conf from "../conf/conf.js";
 import { Client, ID, Account } from "appwrite";
 
 export class AuthService {
@@ -46,6 +46,8 @@ export class AuthService {
         } catch (error) {
             throw error
         }
+
+        return null;
     }
     async logout () {
         try {
